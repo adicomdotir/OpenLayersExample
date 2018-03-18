@@ -1,0 +1,299 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="ol.css" type="text/css" />
+    <style>
+    .map {
+        height: 100%;
+        width: 100%;
+    }
+
+    .arrow_box {
+        position: relative;
+        background: #000;
+        border: 1px solid #003c88;
+    }
+
+    .arrow_box:after,
+    .arrow_box:before {
+        top: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .arrow_box:after {
+        border-color: rgba(0, 0, 0, 0);
+        border-top-color: #000;
+        border-width: 10px;
+        margin-left: -10px;
+    }
+
+    .arrow_box:before {
+        border-color: rgba(0, 60, 136, 0);
+        border-top-color: #003c88;
+        border-width: 11px;
+        margin-left: -11px;
+    }
+
+    .arrow_box {
+        border-radius: 5px;
+        padding: 10px;
+        opacity: 0.8;
+        background-color: black;
+        color: white;
+    }
+
+    #popup-content {
+        max-height: 200px;
+        overflow: auto;
+    }
+
+    #popup-content th {
+        text-align: left;
+        width: 125px;
+    }
+    </style>
+    <script src="ol.js"></script>
+    <title>RSATM EXAMPLE</title>
+</head>
+
+<body>
+    <div id="map" class="map"></div>
+    <div class="arrow_box" id="popup-container">
+        <div id="popup-content"></div>
+    </div>
+    <script type="text/javascript">
+    var pointFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([48.289375, 38.240552])));
+
+    var lineFeature = new ol.Feature(
+        new ol.geom.LineString([
+            ol.proj.fromLonLat([48.289375, 38.240852]),
+            ol.proj.fromLonLat([48.289975, 38.241352])
+        ])
+    );
+
+    var polygonFeature = new ol.Feature(
+        new ol.geom.Polygon([
+            [
+                ol.proj.fromLonLat([48.288075, 38.241052]),
+                ol.proj.fromLonLat([48.288075, 38.241352]),
+                ol.proj.fromLonLat([48.289575, 38.241652]),
+                ol.proj.fromLonLat([48.289375, 38.241052])
+            ]
+        ])
+    );
+
+    var london = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([48.289975, 38.241352]))
+    });
+
+    var madrid = new ol.Feature({
+        geometry: new ol.geom.Point(ol.proj.fromLonLat([48.290575, 38.241652]))
+    });
+
+    var pointStyle = new ol.style.Style({
+        image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+            src: '../energy(2).png',
+            scale: 0.5
+        }))
+    });
+    pointFeature.setStyle(pointStyle);
+    pointFeature.setProperties({
+        id: 1,
+        نوع: "نقطه",
+        مکان: "اردبیل"
+    });
+
+    london.setStyle(new ol.style.Style({
+        image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+            src: '../energy(1).png',
+            scale: 0.5
+        }))
+    }));
+
+    madrid.setStyle(new ol.style.Style({
+        image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+            src: '../energy.png',
+            scale: 0.5
+        }))
+    }));
+
+    var lineStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#F05899',
+            width: 5
+        })
+    });
+    lineFeature.setStyle(lineStyle);
+    lineFeature.setProperties({
+        id: 1,
+        نوع: "خط",
+        مکان: "اردبیل"
+    });
+
+    var polygonStyle = new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#55AA55',
+            width: 2
+        }),
+        fill: new ol.style.Fill({
+            color: '#55AA5525'
+        })
+    });
+    polygonFeature.setStyle(polygonStyle);
+    polygonFeature.setProperties({
+        id: 1,
+        نوع: "چند ضلعی",
+        مکان: "اردبیل"
+    });
+    polygonFeature.set("jsj", "test");
+
+    var vectorSource = new ol.source.Vector({
+        features: [pointFeature, lineFeature, polygonFeature]
+    });
+
+    var vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+    });
+    vectorLayer.set('selectable', true);
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }), vectorLayer
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([48.289775, 38.241052]),
+            zoom: 16
+        })
+    });
+
+    const overlay = new ol.Overlay({
+        element: document.getElementById('popup-container'),
+        positioning: 'bottom-center',
+        offset: [0, -10],
+        autoPan: true
+    });
+    map.addOverlay(overlay);
+    overlay.getElement().addEventListener('click', function() {
+        overlay.setPosition();
+    });
+    map.on('click', function(e) {
+        let markup = '';
+        map.forEachFeatureAtPixel(e.pixel, function(feature) {
+            markup += `${markup && '<hr>'}<table>`;
+            const properties = feature.getProperties();
+            for (const property in properties) {
+            	if (property != 'geometry') {
+                	markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
+            	}
+            }
+            markup += '</table>';
+        }, { hitTolerance: 1 });
+        if (markup) {
+            document.getElementById('popup-content').innerHTML = markup;
+            overlay.setPosition(e.coordinate);
+        } else {
+            overlay.setPosition();
+        }
+    });
+
+    //   var select = null;
+
+    //   var selectSingleClick = new ol.interaction.Select({
+    //   	layers: function(layer) {
+    //         return layer.get('selectable') == true;
+    //       },
+    //   	style: new ol.style.Style({
+    //   		fill: new ol.style.Fill({
+    //   			color: '#45952599'
+    //   		}),
+    //   		stroke: new ol.style.Stroke({
+    //   			color: '#99663399',
+    //   			width: 2
+    //   		})
+    //   	}),
+    //   	features: polygonFeature
+    //   });
+
+    //   map.getInteractions().extend([selectSingleClick]);
+
+    //   var changeInteraction = function() {
+    //       if (select !== null) {
+    //           map.removeInteraction(select);
+    //       }
+
+    // select = selectSingleClick;
+
+    //       if (select !== null) {
+    //           map.addInteraction(select);
+    //           select.on('select', function(e) {
+    //           	console.log(e);
+    //               // document.getElementById('status').innerHTML = '&nbsp;' +
+    //               //     e.target.getFeatures().getLength() +
+    //               //     ' selected features (last operation selected ' + e.selected.length +
+    //               //     ' and deselected ' + e.deselected.length + ' features)';
+    //           });
+    //       }
+    //   };
+
+
+    //   /**
+    //    * onchange callback on the select element.
+    //    */
+    //   changeInteraction();
+
+    var highlightedFeatures = [],
+        selectStyle = new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#0d47a1',
+                width: 2
+            }),
+            image: new ol.style.Circle({
+                radius: 5.5,
+                stroke: new ol.style.Stroke({
+                    color: '#0d47a1',
+                    width: 2
+                })
+            })
+        });
+
+    map.on('click', function(e) {
+        var i;
+        for (i = 0; i < highlightedFeatures.length; i++) {
+            switch (highlightedFeatures[i].getGeometry().getType()) {
+                case 'Point':
+                    highlightedFeatures[i].setStyle(pointStyle);
+                    break;
+                case 'LineString':
+                    highlightedFeatures[i].setStyle(lineStyle);
+                    break;
+                case 'Polygon':
+                    highlightedFeatures[i].setStyle(polygonStyle);
+                    break;
+            }
+        }
+        highlightedFeatures = [];
+        map.forEachFeatureAtPixel(e.pixel, function(feature) {
+            feature.setStyle(selectStyle);
+            highlightedFeatures.push(feature);
+        });
+    });
+
+    var interaction = new ol.interaction.Draw({
+        type: 'Point',
+        source: vectorLayer.getSource()
+    });
+    map.addInteraction(interaction);
+    </script>
+</body>
+
+</html>
