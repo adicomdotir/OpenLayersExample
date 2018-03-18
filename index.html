@@ -58,6 +58,24 @@
         text-align: left;
         width: 125px;
     }
+
+    .select-btn {
+        top: 65px;
+        left: .5em;
+    }
+
+    .ol-touch .select-btn {
+        top: 80px;
+    }
+
+    .draw-btn {
+        top: 85px;
+        left: .5em;
+    }
+
+    .ol-touch .draw-btn {
+        top: 100px;
+    }
     </style>
     <script src="ol.js"></script>
     <title>RSATM EXAMPLE</title>
@@ -69,6 +87,55 @@
         <div id="popup-content"></div>
     </div>
     <script type="text/javascript">
+    window.app = {};
+    var app = window.app;
+    app.CustomControl = function(opt_options) {
+
+        var options = opt_options || {};
+
+        var selectBtn = document.createElement('button');
+        selectBtn.innerHTML = 'S';
+
+        var this_ = this;
+        var handleSelectBtn = function() {
+            // this_.getMap().getView().setRotation(+180);
+            alert("selectable");
+        };
+
+        selectBtn.addEventListener('click', handleSelectBtn, false);
+        selectBtn.addEventListener('touchstart', handleSelectBtn, false);
+
+        var element01 = document.createElement('div');
+        element01.className = 'select-btn ol-unselectable ol-control';
+        element01.appendChild(selectBtn);
+
+        var drawBtn = document.createElement('button');
+        drawBtn.innerHTML = 'S';
+
+        var this_ = this;
+        var handleDrawBtn = function() {
+            // this_.getMap().getView().setRotation(+180);
+            alert("draw");
+        };
+
+        drawBtn.addEventListener('click', handleDrawBtn, false);
+        drawBtn.addEventListener('touchstart', handleDrawBtn, false);
+
+        var element02 = document.createElement('div');
+        element02.className = 'draw-btn ol-unselectable ol-control';
+        element02.appendChild(drawBtn);
+
+        ol.control.Control.call(this, {
+            element: [element01, element02],
+            target: options.target
+        });
+
+    };
+    ol.inherits(app.CustomControl, ol.control.Control);
+
+
+
+
     var pointFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([48.289375, 38.240552])));
 
     var lineFeature = new ol.Feature(
@@ -164,6 +231,13 @@
     vectorLayer.set('selectable', true);
 
     var map = new ol.Map({
+        controls: ol.control.defaults({
+            attributionOptions: /** @type {olx.control.AttributionOptions} */ ({
+                collapsible: false
+            })
+        }).extend([
+            new app.CustomControl()
+        ]),
         target: 'map',
         layers: [
             new ol.layer.Tile({
@@ -192,9 +266,9 @@
             markup += `${markup && '<hr>'}<table>`;
             const properties = feature.getProperties();
             for (const property in properties) {
-            	if (property != 'geometry') {
-                	markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
-            	}
+                if (property != 'geometry') {
+                    markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
+                }
             }
             markup += '</table>';
         }, { hitTolerance: 1 });
@@ -205,51 +279,6 @@
             overlay.setPosition();
         }
     });
-
-    //   var select = null;
-
-    //   var selectSingleClick = new ol.interaction.Select({
-    //   	layers: function(layer) {
-    //         return layer.get('selectable') == true;
-    //       },
-    //   	style: new ol.style.Style({
-    //   		fill: new ol.style.Fill({
-    //   			color: '#45952599'
-    //   		}),
-    //   		stroke: new ol.style.Stroke({
-    //   			color: '#99663399',
-    //   			width: 2
-    //   		})
-    //   	}),
-    //   	features: polygonFeature
-    //   });
-
-    //   map.getInteractions().extend([selectSingleClick]);
-
-    //   var changeInteraction = function() {
-    //       if (select !== null) {
-    //           map.removeInteraction(select);
-    //       }
-
-    // select = selectSingleClick;
-
-    //       if (select !== null) {
-    //           map.addInteraction(select);
-    //           select.on('select', function(e) {
-    //           	console.log(e);
-    //               // document.getElementById('status').innerHTML = '&nbsp;' +
-    //               //     e.target.getFeatures().getLength() +
-    //               //     ' selected features (last operation selected ' + e.selected.length +
-    //               //     ' and deselected ' + e.deselected.length + ' features)';
-    //           });
-    //       }
-    //   };
-
-
-    //   /**
-    //    * onchange callback on the select element.
-    //    */
-    //   changeInteraction();
 
     var highlightedFeatures = [],
         selectStyle = new ol.style.Style({
