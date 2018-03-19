@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="ol.css" type="text/css" />
+    <style>
+    .map {
+        height: 100%;
+        width: 100%;
+    }
+
+    .arrow_box {
+        position: relative;
+        background: #000;
+        border: 1px solid #003c88;
+    }
+
+    .arrow_box:after,
+    .arrow_box:before {
+        top: 100%;
+        left: 50%;
+        border: solid transparent;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: absolute;
+        pointer-events: none;
+    }
+
+    .arrow_box:after {
+        border-color: rgba(0, 0, 0, 0);
+        border-top-color: #000;
+        border-width: 10px;
+        margin-left: -10px;
+    }
+
+    .arrow_box:before {
+        border-color: rgba(0, 60, 136, 0);
+        border-top-color: #003c88;
+        border-width: 11px;
+        margin-left: -11px;
+    }
+
+    .arrow_box {
+        border-radius: 5px;
+        padding: 10px;
+        opacity: 0.8;
+        background-color: black;
+        color: white;
+    }
+
+    #popup-content {
+        max-height: 200px;
+        overflow: auto;
+    }
+
+    #popup-content th {
+        text-align: left;
+        width: 125px;
+    }
+
+    .select-btn {
+        top: 65px;
+        left: .5em;
+    }
+
+    .ol-touch .select-btn {
+        top: 80px;
+    }
+
+    .draw-btn {
+        top: 85px;
+        left: .5em;
+    }
+
+    .ol-touch .draw-btn {
+        top: 100px;
+    }
+    </style>
+    <script src="ol.js"></script>
+    <title>RSATM EXAMPLE</title>
+</head>
+
+<body>
+    <div id="map" class="map"></div>
+    <div class="arrow_box" id="popup-container">
+        <div id="popup-content"></div>
+    </div>
+    <script type="text/javascript">
+    var style = {
+        'Point': new ol.style.Style({
+            image: new ol.style.Circle({
+                fill: new ol.style.Fill({
+                    color: 'rgba(255,255,0,0.4)'
+                }),
+                radius: 5,
+                stroke: new ol.style.Stroke({
+                    color: '#ff0',
+                    width: 1
+                })
+            })
+        }),
+        'LineString': new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#f00',
+                width: 3
+            })
+        }),
+        'MultiLineString': new ol.style.Style({
+            stroke: new ol.style.Stroke({
+                color: '#0f0',
+                width: 3
+            })
+        })
+    };
+
+    var vector = new ol.layer.Vector({
+        source: new ol.source.Vector({
+            url: './m.gpx',
+            format: new ol.format.GPX()
+        }),
+        style: function(feature) {
+            return style[feature.getGeometry().getType()];
+        }
+    });
+
+    var map = new ol.Map({
+        target: 'map',
+        layers: [
+            new ol.layer.Tile({
+                source: new ol.source.OSM()
+            }), vector
+        ],
+        view: new ol.View({
+            center: ol.proj.fromLonLat([48.289775, 38.241052]),
+            zoom: 12
+        })
+    });
+    </script>
+</body>
+
+</html>

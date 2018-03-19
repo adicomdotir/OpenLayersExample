@@ -99,42 +99,48 @@
         var this_ = this;
         var handleSelectBtn = function() {
             // this_.getMap().getView().setRotation(+180);
-            alert("selectable");
+            var interaction;
+            this_.getMap().removeInteraction(interaction);
+            interaction = new ol.interaction.Select();
+            this_.getMap().addInteraction(interaction);
         };
 
         selectBtn.addEventListener('click', handleSelectBtn, false);
         selectBtn.addEventListener('touchstart', handleSelectBtn, false);
 
-        var element01 = document.createElement('div');
-        element01.className = 'select-btn ol-unselectable ol-control';
-        element01.appendChild(selectBtn);
+        var element = document.createElement('div');
+        element.className = 'select-btn ol-unselectable ol-control';
+        element.appendChild(selectBtn);
 
         var drawBtn = document.createElement('button');
-        drawBtn.innerHTML = 'S';
+        drawBtn.innerHTML = 'D';
 
         var this_ = this;
         var handleDrawBtn = function() {
             // this_.getMap().getView().setRotation(+180);
-            alert("draw");
+            var interaction;
+            this_.getMap().removeInteraction(interaction);
+            interaction = new ol.interaction.Draw({
+                type: 'Point',
+                source: vectorLayer.getSource()
+            });
+            this_.getMap().addInteraction(interaction);
         };
 
         drawBtn.addEventListener('click', handleDrawBtn, false);
         drawBtn.addEventListener('touchstart', handleDrawBtn, false);
 
-        var element02 = document.createElement('div');
-        element02.className = 'draw-btn ol-unselectable ol-control';
-        element02.appendChild(drawBtn);
+        // var element02 = document.createElement('div');
+        element.className = 'draw-btn ol-unselectable ol-control';
+        element.appendChild(drawBtn);
 
         ol.control.Control.call(this, {
-            element: [element01, element02],
+            element: element,
             target: options.target
         });
 
     };
     ol.inherits(app.CustomControl, ol.control.Control);
-
-
-
 
     var pointFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([48.289375, 38.240552])));
 
@@ -250,78 +256,74 @@
         })
     });
 
-    const overlay = new ol.Overlay({
-        element: document.getElementById('popup-container'),
-        positioning: 'bottom-center',
-        offset: [0, -10],
-        autoPan: true
-    });
-    map.addOverlay(overlay);
-    overlay.getElement().addEventListener('click', function() {
-        overlay.setPosition();
-    });
-    map.on('click', function(e) {
-        let markup = '';
-        map.forEachFeatureAtPixel(e.pixel, function(feature) {
-            markup += `${markup && '<hr>'}<table>`;
-            const properties = feature.getProperties();
-            for (const property in properties) {
-                if (property != 'geometry') {
-                    markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
-                }
-            }
-            markup += '</table>';
-        }, { hitTolerance: 1 });
-        if (markup) {
-            document.getElementById('popup-content').innerHTML = markup;
-            overlay.setPosition(e.coordinate);
-        } else {
-            overlay.setPosition();
-        }
-    });
+    // const overlay = new ol.Overlay({
+    //     element: document.getElementById('popup-container'),
+    //     positioning: 'bottom-center',
+    //     offset: [0, -10],
+    //     autoPan: true
+    // });
 
-    var highlightedFeatures = [],
-        selectStyle = new ol.style.Style({
-            stroke: new ol.style.Stroke({
-                color: '#0d47a1',
-                width: 2
-            }),
-            image: new ol.style.Circle({
-                radius: 5.5,
-                stroke: new ol.style.Stroke({
-                    color: '#0d47a1',
-                    width: 2
-                })
-            })
-        });
+    // map.addOverlay(overlay);
+    // overlay.getElement().addEventListener('click', function() {
+    //     overlay.setPosition();
+    // });
 
-    map.on('click', function(e) {
-        var i;
-        for (i = 0; i < highlightedFeatures.length; i++) {
-            switch (highlightedFeatures[i].getGeometry().getType()) {
-                case 'Point':
-                    highlightedFeatures[i].setStyle(pointStyle);
-                    break;
-                case 'LineString':
-                    highlightedFeatures[i].setStyle(lineStyle);
-                    break;
-                case 'Polygon':
-                    highlightedFeatures[i].setStyle(polygonStyle);
-                    break;
-            }
-        }
-        highlightedFeatures = [];
-        map.forEachFeatureAtPixel(e.pixel, function(feature) {
-            feature.setStyle(selectStyle);
-            highlightedFeatures.push(feature);
-        });
-    });
+    // map.on('click', function(e) {
+    //     let markup = '';
+    //     map.forEachFeatureAtPixel(e.pixel, function(feature) {
+    //         markup += `${markup && '<hr>'}<table>`;
+    //         const properties = feature.getProperties();
+    //         for (const property in properties) {
+    //             if (property != 'geometry') {
+    //                 markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
+    //             }
+    //         }
+    //         markup += '</table>';
+    //     }, { hitTolerance: 1 });
+    //     if (markup) {
+    //         document.getElementById('popup-content').innerHTML = markup;
+    //         overlay.setPosition(e.coordinate);
+    //     } else {
+    //         overlay.setPosition();
+    //     }
+    // });
 
-    var interaction = new ol.interaction.Draw({
-        type: 'Point',
-        source: vectorLayer.getSource()
-    });
-    map.addInteraction(interaction);
+    // var highlightedFeatures = [],
+    //     selectStyle = new ol.style.Style({
+    //         stroke: new ol.style.Stroke({
+    //             color: '#0d47a1',
+    //             width: 2
+    //         }),
+    //         image: new ol.style.Circle({
+    //             radius: 5.5,
+    //             stroke: new ol.style.Stroke({
+    //                 color: '#0d47a1',
+    //                 width: 2
+    //             })
+    //         })
+    //     });
+
+    // map.on('click', function(e) {
+    //     var i;
+    //     for (i = 0; i < highlightedFeatures.length; i++) {
+    //         switch (highlightedFeatures[i].getGeometry().getType()) {
+    //             case 'Point':
+    //                 highlightedFeatures[i].setStyle(pointStyle);
+    //                 break;
+    //             case 'LineString':
+    //                 highlightedFeatures[i].setStyle(lineStyle);
+    //                 break;
+    //             case 'Polygon':
+    //                 highlightedFeatures[i].setStyle(polygonStyle);
+    //                 break;
+    //         }
+    //     }
+    //     highlightedFeatures = [];
+    //     map.forEachFeatureAtPixel(e.pixel, function(feature) {
+    //         feature.setStyle(selectStyle);
+    //         highlightedFeatures.push(feature);
+    //     });
+    // });
     </script>
 </body>
 
