@@ -105,14 +105,13 @@ var map = new ol.Map({
     })
 });
 
-var button = $('#pan').button('toggle');
+// var button = $('#pan').button('toggle');
 var interaction;
 $('div.btn-group button').on('click', function(event) {
     var id = event.target.id;
-
     // Toggle buttons
-    button.button('toggle');
-    button = $('#' + id).button('toggle');
+    // button.button('toggle');
+    // button = $('#' + id).button('toggle');
     // Remove previous interaction
     map.removeInteraction(interaction);
     // Update active interaction
@@ -124,27 +123,27 @@ $('div.btn-group button').on('click', function(event) {
         case "point":
             interaction = new ol.interaction.Draw({
                 type: 'Point',
-                source: limitsLayer.getSource()
+                source: vectorSource
             });
             map.addInteraction(interaction);
             break;
         case "line":
             interaction = new ol.interaction.Draw({
                 type: 'LineString',
-                source: limitsLayer.getSource()
+                source: vectorSource
             });
             map.addInteraction(interaction);
             break;
         case "polygon":
             interaction = new ol.interaction.Draw({
                 type: 'Polygon',
-                source: limitsLayer.getSource()
+                source: vectorSource
             });
             map.addInteraction(interaction);
             break;
         case "modify":
             interaction = new ol.interaction.Modify({
-                features: new ol.Collection(limitsLayer.getSource().getFeatures())
+                features: new ol.Collection(vectorLayer.getSource().getFeatures())
             });
             map.addInteraction(interaction);
             break;
