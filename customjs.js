@@ -137,9 +137,11 @@ $('div.btn-group button').on('click', function(event) {
         case "polygon":
             interaction = new ol.interaction.Draw({
                 type: 'Polygon',
-                source: vectorSource
+                source: vectorSource,
+                features: [polygonFeature]
             });
             map.addInteraction(interaction);
+            console.log(vectorSource.getFeatures());
             break;
         case "modify":
             interaction = new ol.interaction.Modify({
