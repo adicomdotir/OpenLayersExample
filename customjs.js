@@ -79,25 +79,42 @@ polygonFeature.setStyle(polygonStyle);
 polygonFeature.setProperties({
     id: 1,
     'نوع': 'چند ضلعی',
-    'مکان': 'اردبیل'
+    'مکان': 'اردبیل',
+    'key' : 'value',
+    'کلید' : 'مقدار'
 });
 polygonFeature.set('jsj', 'test');
 
 var vectorSource = new ol.source.Vector({
     features: [pointFeature, lineFeature, polygonFeature]
 });
-
 var vectorLayer = new ol.layer.Vector({
     source: vectorSource
 });
 vectorLayer.set('selectable', true);
+
+var vectorSource2 = new ol.source.Vector({
+    features: []
+});
+var vectorLayer2 = new ol.layer.Vector({
+    source: vectorSource2,
+    style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+            color: '#500A55',
+            width: 2
+        }),
+        fill: new ol.style.Fill({
+            color: '#500A5525'
+        })
+    })
+});
 
 var map = new ol.Map({
     target: 'map',
     layers: [
         new ol.layer.Tile({
             source: new ol.source.OSM()
-        }), vectorLayer
+        }), vectorLayer, vectorLayer2
     ],
     view: new ol.View({
         center: ol.proj.fromLonLat([48.289775, 38.241052]),
@@ -137,15 +154,15 @@ $('div.btn-group button').on('click', function(event) {
         case "polygon":
             interaction = new ol.interaction.Draw({
                 type: 'Polygon',
-                source: vectorSource,
-                features: [polygonFeature]
+                source: vectorSource2
             });
             map.addInteraction(interaction);
             console.log(vectorSource.getFeatures());
             break;
         case "modify":
             interaction = new ol.interaction.Modify({
-                features: new ol.Collection(vectorLayer.getSource().getFeatures())
+                // features: new ol.Collection(vectorLayer.getSource().getFeatures())
+                features: interaction.getFeatures()
             });
             map.addInteraction(interaction);
             break;
