@@ -171,6 +171,12 @@ $('div.btn-group button').on('click', function(event) {
     }
 });
 
+map.addControl(new ol.control.ScaleLine({units: 'metric'}));
+var layerSwitcher = new ol.control.LayerSwitcher({
+    tipLabel: 'Légende' // Optional label for button
+});
+map.addControl(layerSwitcher);
+
 // const overlay = new ol.Overlay({
 //     element: document.getElementById('popup-container'),
 //     positioning: 'bottom-center',
