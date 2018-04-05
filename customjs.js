@@ -114,7 +114,18 @@ var map = new ol.Map({
     layers: [
         new ol.layer.Tile({
             source: new ol.source.OSM()
-        }), vectorLayer, vectorLayer2
+        }),
+        vectorLayer,
+        new ol.layer.Group({
+            title: 'Water color with labels',
+            type: 'base',
+            combine: true,
+            visible: false,
+            layers: [
+                vectorLayer2
+            ]
+        }),
+
     ],
     view: new ol.View({
         center: ol.proj.fromLonLat([48.289775, 38.241052]),
