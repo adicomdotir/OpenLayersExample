@@ -1,13 +1,15 @@
-var pointFeature = new ol.Feature(new ol.geom.Point(ol.proj.fromLonLat([48.289375, 38.240552])));
+let pointFeature = new ol.Feature(
+  new ol.geom.Point(ol.proj.fromLonLat([48.289375, 38.240552]))
+);
 
-var lineFeature = new ol.Feature(
+let lineFeature = new ol.Feature(
   new ol.geom.LineString([
     ol.proj.fromLonLat([48.289375, 38.240852]),
     ol.proj.fromLonLat([48.289975, 38.241352])
   ])
 );
 
-var polygonFeature = new ol.Feature(
+let polygonFeature = new ol.Feature(
   new ol.geom.Polygon([
     [
       ol.proj.fromLonLat([48.288075, 38.241052]),
@@ -18,15 +20,15 @@ var polygonFeature = new ol.Feature(
   ])
 );
 
-var london = new ol.Feature({
+let london = new ol.Feature({
   geometry: new ol.geom.Point(ol.proj.fromLonLat([48.289975, 38.241352]))
 });
 
-var madrid = new ol.Feature({
+let madrid = new ol.Feature({
   geometry: new ol.geom.Point(ol.proj.fromLonLat([48.290575, 38.241652]))
 });
 
-var pointStyle = new ol.style.Style({
+let pointStyle = new ol.style.Style({
   image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
     src: '../energy(2).png',
     scale: 0.5
@@ -53,7 +55,7 @@ madrid.setStyle(new ol.style.Style({
   }))
 }));
 
-var lineStyle = new ol.style.Style({
+let lineStyle = new ol.style.Style({
   stroke: new ol.style.Stroke({
     color: '#F05899',
     width: 5
@@ -66,7 +68,7 @@ lineFeature.setProperties({
   'مکان': 'اردبیل'
 });
 
-var polygonStyle = new ol.style.Style({
+let polygonStyle = new ol.style.Style({
   stroke: new ol.style.Stroke({
     color: '#55AA55',
     width: 2
@@ -85,19 +87,19 @@ polygonFeature.setProperties({
 });
 polygonFeature.set('jsj', 'test');
 
-var vectorSource = new ol.source.Vector({
+let vectorSource = new ol.source.Vector({
   features: [pointFeature, lineFeature, polygonFeature]
 });
-var vectorLayer = new ol.layer.Vector({
+let vectorLayer = new ol.layer.Vector({
   source: vectorSource
 });
 vectorLayer.set('selectable', true);
 
-var vectorSource2 = new ol.source.Vector({
+let vectorSourcePolygon = new ol.source.Vector({
   features: []
 });
-var vectorLayer2 = new ol.layer.Vector({
-  source: vectorSource2,
+let vectorLayerPolygon = new ol.layer.Vector({
+  source: vectorSourcePolygon,
   style: new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: '#500A55',
@@ -109,7 +111,39 @@ var vectorLayer2 = new ol.layer.Vector({
   })
 });
 
-var map = new ol.Map({
+let vectorSourcePolyline = new ol.source.Vector({
+  features: []
+});
+let vectorLayerPolyline = new ol.layer.Vector({
+  source: vectorSourcePolyline,
+  style: new ol.style.Style({
+    stroke: new ol.style.Stroke({
+      color: '#0000BB',
+      width: 2
+    }),
+  })
+});
+
+let vectorSourcePoint = new ol.source.Vector({
+  features: []
+});
+let vectorLayerPoint = new ol.layer.Vector({
+  source: vectorSourcePoint,
+  style: new ol.style.Style({
+    image: new ol.style.Circle({
+      fill: new ol.style.Fill({
+        color: 'rgba(255, 0, 0, 0.5)'
+      }),
+      stroke: new ol.style.Stroke({
+        width: 1,
+        color: 'rgba(255, 0, 0, 1)'
+      }),
+      radius: 5
+    })
+  })
+});
+
+let map = new ol.Map({
   target: 'map',
   layers: [
     new ol.layer.Tile({
@@ -119,11 +153,19 @@ var map = new ol.Map({
       title: 'Layers',
       layers: [
         new ol.layer.Group({
-          title: 'Default',
-          combine: true,
+          title: 'Points',
           visible: true,
+          combine: true,
           layers: [
-            vectorLayer
+            vectorLayerPoint
+          ]
+        }),
+        new ol.layer.Group({
+          title: 'Polylines',
+          visible: true,
+          combine: true,
+          layers: [
+            vectorLayerPolyline
           ]
         }),
         new ol.layer.Group({
@@ -131,7 +173,15 @@ var map = new ol.Map({
           visible: true,
           combine: true,
           layers: [
-            vectorLayer2
+            vectorLayerPolygon
+          ]
+        }),
+        new ol.layer.Group({
+          title: 'Default',
+          combine: true,
+          visible: true,
+          layers: [
+            vectorLayer
           ]
         })
       ]
@@ -143,10 +193,10 @@ var map = new ol.Map({
   })
 });
 
-// var button = $('#pan').button('toggle');
-var interaction;
+// let button = $('#pan').button('toggle');
+let interaction;
 $('div.btn-group button').on('click', function(event) {
-  var id = event.target.id;
+  let id = event.target.id;
   // Toggle buttons
   // button.button('toggle');
   // button = $('#' + id).button('toggle');
@@ -157,28 +207,47 @@ $('div.btn-group button').on('click', function(event) {
     case "select":
       interaction = new ol.interaction.Select();
       map.addInteraction(interaction);
+      interaction.on('select', function(e) {
+        e.target.getFeatures().forEach(function(element) {
+          console.log(element.getProperties());
+          // let markup = '';
+          // markup += `${markup && '<hr>'}<table>`;
+          // const properties = element.getProperties();
+          // for (const property in properties) {
+          //   if (property != 'geometry') {
+          //     markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
+          //   }
+          // }
+          // markup += '</table>';
+          // if (markup) {
+          //   document.getElementById('popup-content').innerHTML = markup;
+          //   overlay.setPosition(e.coordinate);
+          // } else {
+          //   overlay.setPosition();
+          // }
+        });
+      });
       break;
     case "point":
       interaction = new ol.interaction.Draw({
         type: 'Point',
-        source: vectorSource
+        source: vectorSourcePoint
       });
       map.addInteraction(interaction);
       break;
     case "line":
       interaction = new ol.interaction.Draw({
         type: 'LineString',
-        source: vectorSource
+        source: vectorSourcePolyline
       });
       map.addInteraction(interaction);
       break;
     case "polygon":
       interaction = new ol.interaction.Draw({
         type: 'Polygon',
-        source: vectorSource2
+        source: vectorSourcePolygon
       });
       map.addInteraction(interaction);
-      console.log(vectorSource.getFeatures());
       break;
     case "modify":
       interaction = new ol.interaction.Modify({
@@ -195,8 +264,8 @@ $('div.btn-group button').on('click', function(event) {
 map.addControl(new ol.control.ScaleLine({
   units: 'metric'
 }));
-var layerSwitcher = new ol.control.LayerSwitcher({
-  tipLabel: 'Légende' // Optional label for button
+let layerSwitcher = new ol.control.LayerSwitcher({
+  tipLabel: 'button' // Optional label for button
 });
 map.addControl(layerSwitcher);
 
@@ -206,7 +275,7 @@ map.addControl(layerSwitcher);
 //     offset: [0, -10],
 //     autoPan: true
 // });
-
+//
 // map.addOverlay(overlay);
 // overlay.getElement().addEventListener('click', function() {
 //     overlay.setPosition();
@@ -232,7 +301,7 @@ map.addControl(layerSwitcher);
 //     }
 // });
 
-// var highlightedFeatures = [],
+// let highlightedFeatures = [],
 //     selectStyle = new ol.style.Style({
 //         stroke: new ol.style.Stroke({
 //             color: '#0d47a1',
@@ -248,7 +317,7 @@ map.addControl(layerSwitcher);
 //     });
 
 // map.on('click', function(e) {
-//     var i;
+//     let i;
 //     for (i = 0; i < highlightedFeatures.length; i++) {
 //         switch (highlightedFeatures[i].getGeometry().getType()) {
 //             case 'Point':
