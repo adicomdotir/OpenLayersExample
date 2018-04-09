@@ -211,23 +211,18 @@ $(document).ready(function($) {
         interaction.on('select', function(e) {
           e.target.getFeatures().forEach(function(element) {
             console.log(element.getProperties());
-            jQuery.noConflict();
-            $('#myModal').modal('show');
-            // let markup = '';
-            // markup += `${markup && '<hr>'}<table>`;
-            // const properties = element.getProperties();
-            // for (const property in properties) {
-            //   if (property != 'geometry') {
-            //     markup += `<tr><th>${property}</th><td>${properties[property]}</td></tr>`;
-            //   }
-            // }
-            // markup += '</table>';
-            // if (markup) {
-            //   document.getElementById('popup-content').innerHTML = markup;
-            //   overlay.setPosition(e.coordinate);
-            // } else {
-            //   overlay.setPosition();
-            // }
+            $('#ex1').modal();
+
+            let markup = '';
+            markup += `${markup}`;
+            const properties = element.getProperties();
+            for (const property in properties) {
+              if (property != 'geometry') {
+                markup += `<div class='col-md-6'><input type='text' value='${property}'/></div><div class='col-md-6'><input type='text' value='${properties[property]}'/></div>`;
+              }
+            }
+            markup += '';
+            $('#paragh').html(markup);
           });
         });
         break;
