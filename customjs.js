@@ -59,7 +59,7 @@ $(document).ready(function($) {
   let lineStyle = new ol.style.Style({
     stroke: new ol.style.Stroke({
       color: '#F05899',
-      width: 5
+      width: 3
     })
   });
   lineFeature.setStyle(lineStyle);
@@ -119,8 +119,8 @@ $(document).ready(function($) {
     source: vectorSourcePolyline,
     style: new ol.style.Style({
       stroke: new ol.style.Stroke({
-        color: '#0000BB',
-        width: 2
+        color: '#ff3399',
+        width: 3
       }),
     })
   });
@@ -209,20 +209,31 @@ $(document).ready(function($) {
         interaction = new ol.interaction.Select();
         map.addInteraction(interaction);
         interaction.on('select', function(e) {
-          e.target.getFeatures().forEach(function(element) {
-            console.log(element.getProperties());
-            $('#ex1').modal();
+          let writer = new ol.format.GeoJSON();
+          // console.log(arr);
+          // let f = vectorSource.getFeatures();
+          // f = f.concat(vectorSourcePolyline);
+          // console.log(f);
+          // let geojsonStr = writer.writeFeaturesObject(f);
+          // console.log(geojsonStr);
 
-            let markup = '';
-            markup += `${markup}`;
-            const properties = element.getProperties();
-            for (const property in properties) {
-              if (property != 'geometry') {
-                markup += `<div class='col-md-6'><input type='text' value='${property}'/></div><div class='col-md-6'><input type='text' value='${properties[property]}'/></div>`;
-              }
-            }
-            markup += '';
-            $('#paragh').html(markup);
+          // console.log(e.target.getFeatures().item(0).set('mykey' + getRandomInt(1000000), 'myvalue'));
+          // e.target.getFeatures()[0].set('mykey', 'myvalue');
+          e.target.getFeatures().forEach(function(element) {
+            // console.log(element.getProperties());
+            console.log(element.getGeometry());
+
+            // $('#ex1').modal();
+            // let markup = '';
+            // markup += `${markup}`;
+            // const properties = element.getProperties();
+            // for (const property in properties) {
+            //   if (property != 'geometry') {
+            //     markup += `<div class='col-md-6'><input type='text' value='${property}'/></div><div class='col-md-6'><input type='text' value='${properties[property]}'/></div>`;
+            //   }
+            // }
+            // markup += '';
+            // $('#paragh').html(markup);
           });
         });
         break;
@@ -337,3 +348,7 @@ $(document).ready(function($) {
   // });
 
 });
+
+function getRandomInt(max) {
+  return Math.floor(Math.random() * Math.floor(max));
+}
