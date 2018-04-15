@@ -1,4 +1,14 @@
 $(document).ready(function($) {
+  let mousePositionControl = new ol.control.MousePosition({
+    coordinateFormat: ol.coordinate.createStringXY(4),
+    projection: 'EPSG:4326',
+    // comment the following two lines to have the mouse position
+    // be placed within the map.
+    className: 'custom-mouse-position',
+    target: document.getElementById('mouse-position'),
+    undefinedHTML: '&nbsp;'
+  });
+
   let pointFeature = new ol.Feature(
     new ol.geom.Point(ol.proj.fromLonLat([48.289375, 38.240552]))
   );
@@ -20,6 +30,7 @@ $(document).ready(function($) {
       ]
     ])
   );
+  polygonFeature.setId(getRandomInt(123456));
 
   let london = new ol.Feature({
     geometry: new ol.geom.Point(ol.proj.fromLonLat([48.289975, 38.241352]))
@@ -146,6 +157,11 @@ $(document).ready(function($) {
 
   let map = new ol.Map({
     target: 'map',
+    controls: ol.control.defaults({
+      attributionOptions: {
+        collapsible: false
+      }
+    }).extend([mousePositionControl]),
     layers: [
       new ol.layer.Tile({
         source: new ol.source.OSM()
@@ -205,23 +221,25 @@ $(document).ready(function($) {
     map.removeInteraction(interaction);
     // Update active interaction
     switch (event.target.id) {
-      case "select":
+      case 'save':
+        let writer = new ol.format.GeoJSON();
+        console.log(vectorSource.getFeatures());
+        vectorSource.addFeatures(vectorSourcePolyline.getFeatures());
+        console.log(vectorSource.getFeatures());
+        // // let f = vectorSource.getFeatures();
+        // // f = f.concat(vectorSourcePolyline);
+        // // console.log(f);
+        // let geojsonStr = writer.writeFeatures(vectorSource.getFeatures());
+        // console.log(geojsonStr);
+        break;
+      case 'select':
         interaction = new ol.interaction.Select();
         map.addInteraction(interaction);
         interaction.on('select', function(e) {
-          let writer = new ol.format.GeoJSON();
-          // console.log(arr);
-          // let f = vectorSource.getFeatures();
-          // f = f.concat(vectorSourcePolyline);
-          // console.log(f);
-          // let geojsonStr = writer.writeFeaturesObject(f);
-          // console.log(geojsonStr);
-
           // console.log(e.target.getFeatures().item(0).set('mykey' + getRandomInt(1000000), 'myvalue'));
           // e.target.getFeatures()[0].set('mykey', 'myvalue');
           e.target.getFeatures().forEach(function(element) {
             // console.log(element.getProperties());
-            console.log(element.getGeometry());
 
             // $('#ex1').modal();
             // let markup = '';
@@ -237,28 +255,28 @@ $(document).ready(function($) {
           });
         });
         break;
-      case "point":
+      case 'point':
         interaction = new ol.interaction.Draw({
           type: 'Point',
           source: vectorSourcePoint
         });
         map.addInteraction(interaction);
         break;
-      case "line":
+      case 'line':
         interaction = new ol.interaction.Draw({
           type: 'LineString',
           source: vectorSourcePolyline
         });
         map.addInteraction(interaction);
         break;
-      case "polygon":
+      case 'polygon':
         interaction = new ol.interaction.Draw({
           type: 'Polygon',
           source: vectorSourcePolygon
         });
         map.addInteraction(interaction);
         break;
-      case "modify":
+      case 'modify':
         interaction = new ol.interaction.Modify({
           // features: new ol.Collection(vectorLayer.getSource().getFeatures())
           features: interaction.getFeatures()

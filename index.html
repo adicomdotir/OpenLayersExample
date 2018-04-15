@@ -94,6 +94,13 @@
 			background: -moz-linear-gradient(top, #2e5764, #1e3d47);
 			background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(30, 61, 71)), color-stop(1, rgb(46, 87, 100)));
 		}
+
+		.mouse-position {
+			display: inline-block;
+			float: right;
+			vertical-align: middle;
+			padding: 5px;
+		}
 	</style>
 	<script src="ol.js"></script>
 	<title>RSATM EXAMPLE</title>
@@ -101,14 +108,15 @@
 
 <body>
 	<div class="btn-group btn-group-sm" role="group" aria-label="Draw">
-		<button id="pan" type="button" class="btn btn-primary">Pan</button>
+		<button id="save" type="button" class="btn btn-primary">Save</button>
 		<button id="select" type="button" class="btn btn-default">Select</button>
 
 		<button id="point" type="button" class="btn btn-success">Point</button>
 		<button id="line" type="button" class="btn btn-success">Line</button>
 		<button id="polygon" type="button" class="btn btn-success">Polygon</button>
-		<button id="modify" type="button" class="btn btn-danger">Modify</button>
+		<button id="modify" type="button" class="btn btn-warning">Modify</button>
 	</div>
+	<div class="mouse-position" id="mouse-position"></div>
 	<div id="map" class="map"></div>
 	<div class="arrow_box" id="popup-container">
 		<div id="popup-content"></div>
