@@ -116,7 +116,7 @@
 
     var vector = new ol.layer.Vector({
         source: new ol.source.Vector({
-            url: './m.gpx',
+            url: 'http://192.168.1.5:2021/m.gpx',
             format: new ol.format.GPX()
         }),
         style: function(feature) {
@@ -124,17 +124,44 @@
         }
     });
 
+    let polygonFeature = new ol.Feature(
+        new ol.geom.Polygon([
+            [
+                ol.proj.fromLonLat([48.288075, 38.241052]),
+                ol.proj.fromLonLat([48.288075, 38.241352]),
+                ol.proj.fromLonLat([48.289575, 38.241652]),
+                ol.proj.fromLonLat([48.289375, 38.241052])
+            ]
+        ])
+    );
+    let vectorSource = new ol.source.Vector({
+        features: [polygonFeature]
+    });
+    let vectorLayer = new ol.layer.Vector({
+        source: vectorSource
+    });
+
     var map = new ol.Map({
         target: 'map',
         layers: [
             new ol.layer.Tile({
                 source: new ol.source.OSM()
-            }), vector
+            }), vector, vectorLayer
         ],
         view: new ol.View({
             center: ol.proj.fromLonLat([48.289775, 38.241052]),
             zoom: 12
         })
+    });
+
+    
+
+    interaction = new ol.interaction.Select();
+    map.addInteraction(interaction);
+    interaction.on('select', function(e) {
+        let writer = new ol.format.GeoJSON();
+        let geojsonStr = writer.writeFeatures(vector.getSource().getFeatures());
+        console.error(geojsonStr);
     });
     </script>
 </body>

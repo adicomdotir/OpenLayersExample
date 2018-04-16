@@ -155,6 +155,14 @@ $(document).ready(function($) {
     })
   });
 
+  let v = new ol.layer.Vector({
+      title: 'added Layer',
+      source: new ol.source.Vector({
+         url: 'custom.json',
+         format: new ol.format.GeoJSON()
+      })
+  })
+
   let map = new ol.Map({
     target: 'map',
     controls: ol.control.defaults({
@@ -169,6 +177,14 @@ $(document).ready(function($) {
       new ol.layer.Group({
         title: 'Layers',
         layers: [
+          new ol.layer.Group({
+            title: 'JSON',
+            visible: true,
+            combine: true,
+            layers: [
+              v
+            ]
+          }),
           new ol.layer.Group({
             title: 'Points',
             visible: true,
@@ -210,6 +226,8 @@ $(document).ready(function($) {
     })
   });
 
+  const allSource = [vectorSource, vectorSourcePoint, vectorSourcePolygon, vectorSourcePolyline];
+
   // let button = $('#pan').button('toggle');
   let interaction;
   $('div.btn-group button').on('click', function(event) {
@@ -223,14 +241,11 @@ $(document).ready(function($) {
     switch (event.target.id) {
       case 'save':
         let writer = new ol.format.GeoJSON();
-        console.log(vectorSource.getFeatures());
-        vectorSource.addFeatures(vectorSourcePolyline.getFeatures());
-        console.log(vectorSource.getFeatures());
-        // // let f = vectorSource.getFeatures();
-        // // f = f.concat(vectorSourcePolyline);
-        // // console.log(f);
-        // let geojsonStr = writer.writeFeatures(vectorSource.getFeatures());
-        // console.log(geojsonStr);
+        for (variable of allSource) {
+          let f = vectorSourcePolyline.getFeatures();
+          let geojsonStr = writer.writeFeatures(vectorSourcePolyline.getFeatures());
+          console.error(geojsonStr);
+        }
         break;
       case 'select':
         interaction = new ol.interaction.Select();
