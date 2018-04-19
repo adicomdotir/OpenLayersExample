@@ -154,12 +154,14 @@
         })
     });
 
-    
+
 
     interaction = new ol.interaction.Select();
     map.addInteraction(interaction);
     interaction.on('select', function(e) {
-        let writer = new ol.format.GeoJSON();
+        let writer = new ol.format.GeoJSON({
+          featureProjection: 'EPSG:3857'
+        });
         let geojsonStr = writer.writeFeatures(vector.getSource().getFeatures());
         console.error(geojsonStr);
     });

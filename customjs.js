@@ -1,4 +1,5 @@
 $(document).ready(function($) {
+
   let mousePositionControl = new ol.control.MousePosition({
     coordinateFormat: ol.coordinate.createStringXY(4),
     projection: 'EPSG:4326',
@@ -155,13 +156,13 @@ $(document).ready(function($) {
     })
   });
 
+  let fileDir = 'custom.json';
   let v = new ol.layer.Vector({
-      title: 'added Layer',
       source: new ol.source.Vector({
-         url: 'custom.json',
-         format: new ol.format.GeoJSON()
+        format: new ol.format.GeoJSON(),
+        url: 'custom.json',
       })
-  })
+  });
 
   let map = new ol.Map({
     target: 'map',
@@ -178,19 +179,11 @@ $(document).ready(function($) {
         title: 'Layers',
         layers: [
           new ol.layer.Group({
-            title: 'JSON',
-            visible: true,
-            combine: true,
-            layers: [
-              v
-            ]
-          }),
-          new ol.layer.Group({
             title: 'Points',
             visible: true,
             combine: true,
             layers: [
-              vectorLayerPoint
+              vectorLayerPoint, v
             ]
           }),
           new ol.layer.Group({
@@ -240,7 +233,9 @@ $(document).ready(function($) {
     // Update active interaction
     switch (event.target.id) {
       case 'save':
-        let writer = new ol.format.GeoJSON();
+        let writer = new ol.format.GeoJSON({
+          featureProjection: 'EPSG:3857'
+        });
         for (variable of allSource) {
           let f = vectorSourcePolyline.getFeatures();
           let geojsonStr = writer.writeFeatures(vectorSourcePolyline.getFeatures());
