@@ -1,3 +1,9 @@
+var myMap = new Map([["thing1", 1], ["thing2", 2], ["thing3", 3]]);
+
+for (var [key, value] of myMap) {
+  console.log(key + ' = ' + value);
+}
+
 $(document).ready(function($) {
 
   let mousePositionControl = new ol.control.MousePosition({

@@ -5,103 +5,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.css" />
 	<link href="css/bootstrap.min.css" rel="stylesheet">
 	<link href="css/ol-layerswitcher.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/ol.css" type="text/css" />
-	<style>
-		.map {
-			height: 100%;
-			width: 100%;
-		}
-
-		.arrow_box {
-			position: relative;
-			background: #000;
-			border: 1px solid #003c88;
-		}
-
-		.arrow_box:after,
-		.arrow_box:before {
-			top: 100%;
-			left: 50%;
-			border: solid transparent;
-			content: " ";
-			height: 0;
-			width: 0;
-			position: absolute;
-			pointer-events: none;
-		}
-
-		.arrow_box:after {
-			border-color: rgba(0, 0, 0, 0);
-			border-top-color: #000;
-			border-width: 10px;
-			margin-left: -10px;
-		}
-
-		.arrow_box:before {
-			border-color: rgba(0, 60, 136, 0);
-			border-top-color: #003c88;
-			border-width: 11px;
-			margin-left: -11px;
-		}
-
-		.arrow_box {
-			border-radius: 5px;
-			padding: 10px;
-			opacity: 0.8;
-			background-color: black;
-			color: white;
-		}
-
-		#popup-content {
-			max-height: 200px;
-			overflow: auto;
-		}
-
-		#popup-content th {
-			text-align: left;
-			width: 125px;
-		}
-
-		.select-btn {
-			top: 65px;
-			left: .5em;
-		}
-
-		.ol-touch .select-btn {
-			top: 80px;
-		}
-
-		.draw-btn {
-			top: 85px;
-			left: .5em;
-		}
-
-		.ol-touch .draw-btn {
-			top: 100px;
-		}
-
-		.modal {
-			position: relative;
-			overflow: visible;
-			padding: 0px;
-		}
-
-		.property h3 {
-			margin: 0;
-			padding: 10px;
-			color: rgb(255, 255, 255);
-			font-size: 14px;
-			background: -moz-linear-gradient(top, #2e5764, #1e3d47);
-			background: -webkit-gradient(linear, left bottom, left top, color-stop(0, rgb(30, 61, 71)), color-stop(1, rgb(46, 87, 100)));
-		}
-
-		.mouse-position {
-			display: inline-block;
-			float: right;
-			vertical-align: middle;
-			padding: 5px;
-		}
-	</style>
+	<link href="css/ol.css" rel="stylesheet" />
+	<link href="css/custom.css" rel="stylesheet">
 	<title>RSATM EXAMPLE</title>
 </head>
 
@@ -129,14 +34,13 @@
 		</div>
 	</div>
 
+	<!-- Script Section -->
 	<script src="scripts/ol.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-modal/0.9.1/jquery.modal.min.js"></script>
-	<script href="scripts/bootstrap.min.js"></script>
+	<script src="scripts/bootstrap.min.js"></script>
 	<script src="scripts/ol-layerswitcher.js"></script>
-	<!-- <script src="init.js"></script> -->
 	<script src="scripts/customjs.js"></script>
-
 </body>
 
 </html>
