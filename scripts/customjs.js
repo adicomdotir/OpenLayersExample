@@ -1,7 +1,5 @@
 $(document).ready(function($) {
 
-  sum();
-
   let mousePositionControl = new ol.control.MousePosition({
     coordinateFormat: ol.coordinate.createStringXY(4),
     projection: 'EPSG:4326',
@@ -158,11 +156,11 @@ $(document).ready(function($) {
     })
   });
 
-  let fileDir = 'custom.json';
+  let fileDir = 'assets/custom.json';
   let v = new ol.layer.Vector({
       source: new ol.source.Vector({
         format: new ol.format.GeoJSON(),
-        url: 'custom.json',
+        url: 'assets/custom.json',
       })
   });
 
@@ -181,11 +179,19 @@ $(document).ready(function($) {
         title: 'Layers',
         layers: [
           new ol.layer.Group({
+            title: 'JSON',
+            visible: true,
+            combine: true,
+            layers: [
+              v
+            ]
+          }),
+          new ol.layer.Group({
             title: 'Points',
             visible: true,
             combine: true,
             layers: [
-              vectorLayerPoint, v
+              vectorLayerPoint
             ]
           }),
           new ol.layer.Group({
