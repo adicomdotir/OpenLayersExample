@@ -1,9 +1,3 @@
-var myMap = new Map([["thing1", 1], ["thing2", 2], ["thing3", 3]]);
-
-for (var [key, value] of myMap) {
-  console.log(key + ' = ' + value);
-}
-
 $(document).ready(function($) {
 
   let mousePositionControl = new ol.control.MousePosition({
@@ -37,7 +31,7 @@ $(document).ready(function($) {
       ]
     ])
   );
-  polygonFeature.setId(getRandomInt(123456));
+  polygonFeature.setId(123456);
 
   let london = new ol.Feature({
     geometry: new ol.geom.Point(ol.proj.fromLonLat([48.289975, 38.241352]))
@@ -58,6 +52,25 @@ $(document).ready(function($) {
     id: 1,
     'نوع': 'نقطه',
     'مکان': 'اردبیل'
+  });
+
+  let tir2 = new ol.style.Style({
+    image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+      src: '../energy(1).png',
+      scale: 0.5
+    }))
+  });
+  let tir3 = new ol.style.Style({
+    image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+      src: '../energy.png',
+      scale: 0.5
+    }))
+  });
+  let tir4 = new ol.style.Style({
+    image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+      src: '../marker.png',
+      scale: 0.5
+    }))
   });
 
   london.setStyle(new ol.style.Style({
@@ -164,10 +177,10 @@ $(document).ready(function($) {
 
   let fileDir = 'assets/custom.json';
   let v = new ol.layer.Vector({
-      source: new ol.source.Vector({
-        format: new ol.format.GeoJSON(),
-        url: 'assets/custom.json',
-      })
+    source: new ol.source.Vector({
+      format: new ol.format.GeoJSON(),
+      url: 'assets/custom.json',
+    })
   });
 
   let map = new ol.Map({
@@ -264,18 +277,71 @@ $(document).ready(function($) {
           // e.target.getFeatures()[0].set('mykey', 'myvalue');
           e.target.getFeatures().forEach(function(element) {
             // console.log(element.getProperties());
-
-            // $('#ex1').modal();
-            // let markup = '';
-            // markup += `${markup}`;
-            // const properties = element.getProperties();
-            // for (const property in properties) {
-            //   if (property != 'geometry') {
-            //     markup += `<div class='col-md-6'><input type='text' value='${property}'/></div><div class='col-md-6'><input type='text' value='${properties[property]}'/></div>`;
-            //   }
-            // }
-            // markup += '';
-            // $('#paragh').html(markup);
+            var featureIndex = element.getId();
+            var featureTemp = element;
+            $('#ex1').modal();
+            let markup = '';
+            markup += `${markup}`;
+            const properties = element.getProperties();
+            let index = 0;
+            for (const property in properties) {
+              if (property != 'geometry') {
+                index++;
+                console.log(index);
+                markup += `<div class='form-row'>` +
+                  `<div class='form-group col-md-6'>` +
+                  `<input class="form-control" id="inputModalKey${index}" placeholder="Key" type='text' value='${property}'/>` +
+                  `</div>` +
+                  `<div class='form-group col-md-6'>` +
+                  `<input class="form-control" id="inputModalValue${index}" placeholder="Value" type='text' value='${properties[property]}'/>` +
+                  `</div>` +
+                  `</div>`;
+              }
+            }
+            markup += '';
+            $('#paragh').html(markup);
+            $('#addBtn').click(function() {
+              index++;
+              console.log(index);
+              const html = `<div class='form-row'>` +
+                `<div class='form-group col-md-6'>` +
+                `<input class="form-control" id="inputModalKey${index}" placeholder="Key" type='text'/>` +
+                `</div>` +
+                `<div class='form-group col-md-6'>` +
+                `<input class="form-control" id="inputModalValue${index}" placeholder="Value" type='text'/>` +
+                `</div>` +
+                `</div>`;
+              $('#paragh').append(html);
+            });
+            $('#saveBtn').click(function() {
+              // let f = vectorSource.getFeatureById(featureIndex)
+              let keys = [];
+              $('[id^=inputModalKey]').each(function() {
+                keys.push(this.value);
+              });
+              let values = [];
+              $('[id^=inputModalValue]').each(function() {
+                values.push(this.value);
+              });
+              for (let i = 0; i < keys.length; i++) {
+                featureTemp.set(keys[i], values[i]);
+              }
+              switch ($('#sel1').val()) {
+                case 'Tir 1':
+                  featureTemp.setStyle(pointStyle);
+                  break;
+                case 'Tir 2':
+                  featureTemp.setStyle(tir2);
+                  break;
+                case 'Tir 3':
+                  featureTemp.setStyle(tir3);
+                  break;
+                case 'Tir 4':
+                  featureTemp.setStyle(tir4);
+                  break;
+              }
+              $.modal.close();
+            });
           });
         });
         break;
