@@ -54,25 +54,6 @@ $(document).ready(function($) {
     'مکان': 'اردبیل'
   });
 
-  let tir2 = new ol.style.Style({
-    image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-      src: '../energy(1).png',
-      scale: 0.5
-    }))
-  });
-  let tir3 = new ol.style.Style({
-    image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-      src: '../energy.png',
-      scale: 0.5
-    }))
-  });
-  let tir4 = new ol.style.Style({
-    image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-      src: '../marker.png',
-      scale: 0.5
-    }))
-  });
-
   london.setStyle(new ol.style.Style({
     image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
       src: '../energy(1).png',
@@ -273,76 +254,79 @@ $(document).ready(function($) {
         interaction = new ol.interaction.Select();
         map.addInteraction(interaction);
         interaction.on('select', function(e) {
-          // console.log(e.target.getFeatures().item(0).set('mykey' + getRandomInt(1000000), 'myvalue'));
-          // e.target.getFeatures()[0].set('mykey', 'myvalue');
-          e.target.getFeatures().forEach(function(element) {
-            // console.log(element.getProperties());
-            var featureIndex = element.getId();
-            var featureTemp = element;
-            $('#ex1').modal();
-            let markup = '';
-            markup += `${markup}`;
-            const properties = element.getProperties();
-            let index = 0;
-            for (const property in properties) {
-              if (property != 'geometry') {
-                index++;
-                console.log(index);
-                markup += `<div class='form-row'>` +
-                  `<div class='form-group col-md-6'>` +
-                  `<input class="form-control" id="inputModalKey${index}" placeholder="Key" type='text' value='${property}'/>` +
-                  `</div>` +
-                  `<div class='form-group col-md-6'>` +
-                  `<input class="form-control" id="inputModalValue${index}" placeholder="Value" type='text' value='${properties[property]}'/>` +
-                  `</div>` +
-                  `</div>`;
-              }
-            }
-            markup += '';
-            $('#paragh').html(markup);
-            $('#addBtn').click(function() {
-              index++;
-              console.log(index);
-              const html = `<div class='form-row'>` +
-                `<div class='form-group col-md-6'>` +
-                `<input class="form-control" id="inputModalKey${index}" placeholder="Key" type='text'/>` +
-                `</div>` +
-                `<div class='form-group col-md-6'>` +
-                `<input class="form-control" id="inputModalValue${index}" placeholder="Value" type='text'/>` +
-                `</div>` +
-                `</div>`;
-              $('#paragh').append(html);
-            });
-            $('#saveBtn').click(function() {
-              // let f = vectorSource.getFeatureById(featureIndex)
-              let keys = [];
-              $('[id^=inputModalKey]').each(function() {
-                keys.push(this.value);
-              });
-              let values = [];
-              $('[id^=inputModalValue]').each(function() {
-                values.push(this.value);
-              });
-              for (let i = 0; i < keys.length; i++) {
-                featureTemp.set(keys[i], values[i]);
-              }
-              switch ($('#sel1').val()) {
-                case 'Tir 1':
-                  featureTemp.setStyle(pointStyle);
-                  break;
-                case 'Tir 2':
-                  featureTemp.setStyle(tir2);
-                  break;
-                case 'Tir 3':
-                  featureTemp.setStyle(tir3);
-                  break;
-                case 'Tir 4':
-                  featureTemp.setStyle(tir4);
-                  break;
-              }
-              $.modal.close();
-            });
-          });
+          callModal(e.target.getFeatures().getArray()[0]);
+
+          // let element = e.target.getFeatures().getArray()[0];
+          // var featureIndex = element.getId();
+          // var featureTemp = element;
+          // $('#ex1').modal();
+          // let markup = '';
+          // markup += `${markup}`;
+          // const properties = element.getProperties();
+          // let index = 0;
+          // for (const property in properties) {
+          //   if (property != 'geometry') {
+          //     index++;
+          //     // console.log(index);
+          //     markup += `<div class='form-row'>` +
+          //       `<div class='form-group col-md-6'>` +
+          //       `<input class="form-control" id="inputModalKey${index}" placeholder="Key" type='text' value='${property}'/>` +
+          //       `</div>` +
+          //       `<div class='form-group col-md-6'>` +
+          //       `<input class="form-control" id="inputModalValue${index}" placeholder="Value" type='text' value='${properties[property]}'/>` +
+          //       `</div>` +
+          //       `</div>`;
+          //   }
+          // }
+          // markup += '';
+          // $('#paragh').html(markup);
+          // $('#addBtn').click(function() {
+          //   console.log('Add button clicked!');
+          //   console.log(this);
+          //   // const innerIndex = $('[id^=inputModalKey]').length + 1;
+          //   // console.log(innerIndex);
+          //   // const html = `<div class='form-row'>` +
+          //   //   `<div class='form-group col-md-6'>` +
+          //   //   `<input class="form-control" id="inputModalKey${innerIndex}" placeholder="Key" type='text'/>` +
+          //   //   `</div>` +
+          //   //   `<div class='form-group col-md-6'>` +
+          //   //   `<input class="form-control" id="inputModalValue${innerIndex}" placeholder="Value" type='text'/>` +
+          //   //   `</div>` +
+          //   //   `</div>`;
+          //   // $('#paragh').append(html);
+          // });
+          // $('#saveBtn').click(function() {
+          //   // let f = vectorSource.getFeatureById(featureIndex)
+          //   let keys = [];
+          //   $('[id^=inputModalKey]').each(function() {
+          //     keys.push(this.value);
+          //   });
+          //   let values = [];
+          //   $('[id^=inputModalValue]').each(function() {
+          //     values.push(this.value);
+          //   });
+          //   for (let i = 0; i < keys.length; i++) {
+          //     featureTemp.set(keys[i], values[i]);
+          //   }
+          //   switch ($('#sel1').val()) {
+          //     case 'Tir 1':
+          //       featureTemp.setStyle(pointStyle);
+          //       break;
+          //     case 'Tir 2':
+          //       featureTemp.setStyle(tir2);
+          //       break;
+          //     case 'Tir 3':
+          //       featureTemp.setStyle(tir3);
+          //       break;
+          //     case 'Tir 4':
+          //       featureTemp.setStyle(tir4);
+          //       break;
+          //   }
+          //   $.modal.close();
+          // });
+          // // e.target.getFeatures().forEach(function(element) {
+          // //   // console.log(element.getProperties());
+          // // });
         });
         break;
       case 'point':
@@ -459,4 +443,151 @@ $(document).ready(function($) {
 
 function getRandomInt(max) {
   return Math.floor(Math.random() * Math.floor(max));
+}
+
+function callModal(element) {
+  var featureIndex = element.getId();
+  var featureTemp = element;
+
+  let markup = `<div class="form-row">
+    <div class="form-group col-md-12">
+      <label for="modalShapeType">Type</label>
+      <select class="form-control" id="sel1">
+        <option>Tir 1</option>
+        <option>Tir 2</option>
+        <option>Tir 3</option>
+        <option>Tir 4</option>
+      </select>
+    </div>
+  </div>`;
+  // markup += `${markup}`;
+  const properties = element.getProperties();
+  let index = 0;
+  for (const property in properties) {
+    if (property != 'geometry') {
+      index++;
+      // console.log(index);
+      markup += `<div class='form-row'>` +
+        `<div class='form-group col-md-6'>` +
+        `<input class="form-control" id="inputModalKey${index}" placeholder="Key" type='text' value='${property}'/>` +
+        `</div>` +
+        `<div class='form-group col-md-6'>` +
+        `<input class="form-control" id="inputModalValue${index}" placeholder="Value" type='text' value='${properties[property]}'/>` +
+        `</div>` +
+        `</div>`;
+    }
+  }
+  markup += '';
+
+  var modal = new tingle.modal({
+    footer: true,
+    stickyFooter: false,
+    closeMethods: ['overlay', 'button', 'escape'],
+    closeLabel: "Close",
+    cssClass: ['custom-class-1', 'custom-class-2'],
+    onOpen: function() {
+      console.log('modal open');
+    },
+    onClose: function() {
+      console.log('modal closed');
+    },
+    beforeClose: function() {
+      // here's goes some logic
+      // e.g. save content before closing the modal
+      return true; // close the modal
+      return false; // nothing happens
+    }
+  });
+
+  // set content
+  modal.setContent(markup);
+  // add a button
+  modal.addFooterBtn('ذخیره', 'tingle-btn tingle-btn--primary', function() {
+    // here goes some logic
+    console.log('save!!!!');
+    // let f = vectorSource.getFeatureById(featureIndex)
+    let keys = [];
+    $('[id^=inputModalKey]').each(function() {
+      keys.push(this.value);
+    });
+    let values = [];
+    $('[id^=inputModalValue]').each(function() {
+      values.push(this.value);
+    });
+    for (let i = 0; i < keys.length; i++) {
+      featureTemp.set(keys[i], values[i]);
+    }
+    switch ($('#sel1').val()) {
+      case 'Tir 1':
+        featureTemp.setStyle(getStyle($('#sel1').val()));
+        break;
+      case 'Tir 2':
+        featureTemp.setStyle(getStyle($('#sel1').val()));
+        break;
+      case 'Tir 3':
+        featureTemp.setStyle(getStyle($('#sel1').val()));
+        break;
+      case 'Tir 4':
+        featureTemp.setStyle(getStyle($('#sel1').val()));
+        break;
+    }
+    modal.close();
+  });
+  // add another button
+  modal.addFooterBtn('اضافه کردن', 'tingle-btn tingle-btn--danger', function() {
+    console.log('added');
+    const innerIndex = $('[id^=inputModalKey]').length + 1;
+    console.log(innerIndex);
+    const html = `<div class='form-row'>` +
+      `<div class='form-group col-md-6'>` +
+      `<input class="form-control" id="inputModalKey${innerIndex}" placeholder="Key" type='text'/>` +
+      `</div>` +
+      `<div class='form-group col-md-6'>` +
+      `<input class="form-control" id="inputModalValue${innerIndex}" placeholder="Value" type='text'/>` +
+      `</div>` +
+      `</div>`;
+    let oldHtml = modal.getContent();
+    oldHtml.innerHTML += html;
+  });
+  // open modal
+  modal.open();
+}
+
+function getStyle(object) {
+  let style;
+  switch (object) {
+    case 'Tir 1':
+      style = new ol.style.Style({
+        image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+          src: '../energy(1).png',
+          scale: 0.5
+        }))
+      });
+      break;
+    case 'Tir 2':
+      style = new ol.style.Style({
+        image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+          src: '../energy.png',
+          scale: 0.5
+        }))
+      });
+      break;
+    case 'Tir 3':
+      style = new ol.style.Style({
+        image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+          src: '../energy(2).png',
+          scale: 0.5
+        }))
+      });
+      break;
+      case 'Tir 4':
+        style = new ol.style.Style({
+          image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
+            src: '../1.png',
+            scale: 0.5
+          }))
+        });
+        break;
+  }
+  return style;
 }
