@@ -43,7 +43,7 @@ $(document).ready(function($) {
 
   let pointStyle = new ol.style.Style({
     image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-      src: '../energy(2).png',
+      src: 'assets/energy(2).png',
       scale: 0.5
     }))
   });
@@ -56,14 +56,14 @@ $(document).ready(function($) {
 
   london.setStyle(new ol.style.Style({
     image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-      src: '../energy(1).png',
+      src: 'assets/energy(1).png',
       scale: 0.5
     }))
   }));
 
   madrid.setStyle(new ol.style.Style({
     image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-      src: '../energy.png',
+      src: 'assets/energy.png',
       scale: 0.5
     }))
   }));
@@ -559,7 +559,7 @@ function getStyle(object) {
     case 'Tir 1':
       style = new ol.style.Style({
         image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-          src: '../energy(1).png',
+          src: 'assets/energy(1).png',
           scale: 0.5
         }))
       });
@@ -567,7 +567,7 @@ function getStyle(object) {
     case 'Tir 2':
       style = new ol.style.Style({
         image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-          src: '../energy.png',
+          src: 'assets/energy.png',
           scale: 0.5
         }))
       });
@@ -575,7 +575,7 @@ function getStyle(object) {
     case 'Tir 3':
       style = new ol.style.Style({
         image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-          src: '../energy(2).png',
+          src: 'assets/energy(2).png',
           scale: 0.5
         }))
       });
@@ -583,7 +583,7 @@ function getStyle(object) {
       case 'Tir 4':
         style = new ol.style.Style({
           image: new ol.style.Icon( /** @type {olx.style.IconOptions} */ ({
-            src: '../1.png',
+            src: 'assets/1.png',
             scale: 0.5
           }))
         });
