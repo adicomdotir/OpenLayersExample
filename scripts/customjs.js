@@ -486,10 +486,10 @@ function callModal(element) {
     closeLabel: "Close",
     cssClass: ['custom-class-1', 'custom-class-2'],
     onOpen: function() {
-      console.log('modal open');
+      // console.log('modal open');
     },
     onClose: function() {
-      console.log('modal closed');
+      // console.log('modal closed');
     },
     beforeClose: function() {
       // here's goes some logic
