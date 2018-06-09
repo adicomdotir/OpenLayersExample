@@ -156,7 +156,7 @@ $(document).ready(function($) {
     })
   });
 
-  let fileDir = 'assets/custom.json';
+  let fileDir = 'assets/ELWOML.json';
   let v = new ol.layer.Vector({
     source: new ol.source.Vector({
       format: new ol.format.GeoJSON(),

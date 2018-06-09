@@ -1,0 +1,129 @@
+{
+    "displayFieldName": "",
+    "fieldAliases": {
+        "OBJECTID": "OBJECTID",
+        "DissolveID": "DissolveID",
+        "CatchID": "CatchID",
+        "Length": "Length",
+        "Fnode": "Fnode",
+        "Tnode": "Tnode",
+        "CatchID2": "CatchID2",
+        "OrigOID": "OrigOID",
+        "Shape_Length": "Shape_Length"
+    },
+    "geometryType": "esriGeometryPolyline",
+    "spatialReference": {
+        "wkid": 102113
+    },
+    "fields": [
+        {
+            "name": "OBJECTID",
+            "type": "esriFieldTypeOID",
+            "alias": "OBJECTID"
+        },
+        {
+            "name": "DissolveID",
+            "type": "esriFieldTypeInteger",
+            "alias": "DissolveID"
+        },
+        {
+            "name": "CatchID",
+            "type": "esriFieldTypeDouble",
+            "alias": "CatchID"
+        },
+        {
+            "name": "Length",
+            "type": "esriFieldTypeDouble",
+            "alias": "Length"
+        },
+        {
+            "name": "Fnode",
+            "type": "esriFieldTypeInteger",
+            "alias": "Fnode"
+        },
+        {
+            "name": "Tnode",
+            "type": "esriFieldTypeInteger",
+            "alias": "Tnode"
+        },
+        {
+            "name": "CatchID2",
+            "type": "esriFieldTypeInteger",
+            "alias": "CatchID2"
+        },
+        {
+            "name": "OrigOID",
+            "type": "esriFieldTypeInteger",
+            "alias": "OrigOID"
+        },
+        {
+            "name": "Shape_Length",
+            "type": "esriFieldTypeDouble",
+            "alias": "Shape_Length"
+        }
+    ],
+    "features": [
+        {
+            "attributes": {
+                "OBJECTID": 1,
+                "DissolveID": 27595,
+                "CatchID": 27595,
+                "Length": 2781.07146565,
+                "Fnode": 26156,
+                "Tnode": 26157,
+                "CatchID2": 27595,
+                "OrigOID": 26064,
+                "Shape_Length": 3396.52480192211
+            },
+            "geometry": {
+                "paths": [
+                    [
+                        [
+                            -12199216.57915191,
+                            4173685.6358526573
+                        ],
+                        [
+                            -12201719.387905361,
+                            4170671.685971223
+                        ],
+                        [
+                            -12201768.97746418,
+                            4170677.9241078123
+                        ]
+                    ]
+                ]
+            }
+        },
+		{
+            "attributes": {
+                "OBJECTID": 2,
+                "DissolveID": 27595,
+                "CatchID": 27595,
+                "Length": 2781.07146565,
+                "Fnode": 26156,
+                "Tnode": 26157,
+                "CatchID2": 27595,
+                "OrigOID": 27064,
+                "Shape_Length": 3396.52480192211
+            },
+            "geometry": {
+                "paths": [
+                    [
+                        [
+                            -12199216.57915191,
+                            4173685.6358526573
+                        ],
+                        [
+                            -12201719.387905361,
+                            4170671.685971223
+                        ],
+                        [
+                            -12201768.97746418,
+                            4170677.9241078123
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
+}
